@@ -1,0 +1,27 @@
+version: '3'
+services:
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+
+  sensu-core:
+    build:
+      context: .
+      dockerfile: Dockerfile-sensu-core
+    ports:
+      - 3030:3030
+      - 4567:4567
+    depends_on:
+      - redis
+
+  uchiwa:
+    build:
+      context: .
+      dockerfile: Dockerfile-uchiwa
+    ports:
+      - 3000:3000
+    depends_on:
+      - sensu-core
+
+

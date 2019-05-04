@@ -1,0 +1,10 @@
+FROM docker.otenv.com/ot-ubuntu:18-latest
+
+RUN wget -q https://sensu.global.ssl.fastly.net/apt/pubkey.gpg -O- | apt-key add -
+RUN echo "deb     https://sensu.global.ssl.fastly.net/apt bionic main" > /etc/apt/sources.list.d/sensu.list
+RUN apt-get update
+RUN apt-get install uchiwa
+COPY config/uchiwa/* /etc/sensu/
+EXPOSE 3000
+CMD service uchiwa start && tail -f /var/log/uchiwa.log
+

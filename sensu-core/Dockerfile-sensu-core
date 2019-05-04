@@ -1,0 +1,11 @@
+FROM docker.otenv.com/ot-ubuntu:18-latest
+
+RUN wget -q https://sensu.global.ssl.fastly.net/apt/pubkey.gpg -O- | apt-key add -
+RUN echo "deb     https://sensu.global.ssl.fastly.net/apt bionic main" > /etc/apt/sources.list.d/sensu.list
+RUN apt-get update
+RUN apt-get install sensu
+COPY config/sensu-core/* /etc/sensu/conf.d/
+EXPOSE 3030
+EXPOSE 4567
+CMD /opt/sensu/bin/sensu-service start server fork && /opt/sensu/bin/sensu-service start api fork && /opt/sensu/bin/sensu-service start client fork && tail -f /var/log/sensu/sensu-*.log
+
