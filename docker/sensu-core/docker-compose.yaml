@@ -1,5 +1,11 @@
 version: '3'
 services:
+  sensu-base:
+    image: sensu-base
+    build:
+      context: .
+      dockerfile: Dockerfile-sensu-base
+
   redis:
     image: redis
     ports:
@@ -14,6 +20,7 @@ services:
       - 4567:4567
     depends_on:
       - redis
+      - sensu-base
 
   uchiwa:
     build:

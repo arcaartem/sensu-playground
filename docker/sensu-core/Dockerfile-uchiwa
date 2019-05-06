@@ -1,0 +1,6 @@
+FROM sensu-base
+
+COPY config/uchiwa/* /etc/sensu/
+EXPOSE 3000
+CMD service uchiwa start && tail -f /var/log/uchiwa.log
+
