@@ -1,0 +1,21 @@
+version: '3'
+services:
+  sensu-backend:
+    image: sensu/sensu:latest
+    ports:
+      - 2380:2380
+      - 3000:3000
+      - 8080:8080
+      - 8081:8081
+    volumes:
+       - ./lib/sensu:/var/lib/sensu
+    command: sensu-backend start
+
+  sensu-agent:
+    image: sensu/sensu:latest
+    depends_on:
+      - sensu-backend
+    volumes:
+       - ./lib/sensu:/var/lib/sensu
+    command: sensu-agent start --backend-url ws://sensu-backend:8081 --subscriptions webserver,system --cache-dir /var/lib/sensu
+
